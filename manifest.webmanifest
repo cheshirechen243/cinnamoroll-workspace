@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "玉桂狗 · 专注台",
+  "short_name": "玉桂狗专注台",
+  "description": "专治拖延与走神的专注力自愈工作台",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#FDF7FB",
+  "theme_color": "#E6F4FF",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
