@@ -4,7 +4,7 @@
  * - Firebase 脚本(gstatic)：缓存后可离线启动
  * - Firestore 等其它跨域请求：不拦截，直接走网络
  */
-const CACHE = 'cinnamoroll-v25';
+const CACHE = 'cinnamoroll-v31';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
