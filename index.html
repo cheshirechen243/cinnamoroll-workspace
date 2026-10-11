@@ -1699,12 +1699,12 @@ function renderPetEditCard(pt,canDel){
   }).join('');
   return `<div class="item-card" style="display:block;margin-top:14px"><div class="row"><div class="field" style="flex:2"><label>名字</label><input class="input" value="${esc(pt.name)}" onchange="petRename('${pt.id}',this.value)"></div><div class="field" style="max-width:200px"><label>大小（${PET_DEV_NAME[petDevKind()]}） <span id="petSizeLbl">${petSizeOf(pt)}</span>%</label><input type="range" min="50" max="250" step="5" value="${petSizeOf(pt)}" oninput="petResize('${pt.id}',this.value)"><div class="muted" style="font-size:11px;margin-top:2px">电脑、平板、手机各记各的</div></div></div>
 <div class="row" style="margin-top:8px;flex-wrap:wrap;align-items:stretch"><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>换表情间隔<br>（秒，0 = 不自动换）</label><input class="input" type="number" min="0" max="3600" step="10" value="${p.moodSecs}" onchange="petSetNum('moodSecs',this.value)"></div><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>沿边爬动间隔<br>（秒，0 = 待在右下角不动）</label><input class="input" type="number" min="0" max="3600" step="10" value="${p.walkSecs}" onchange="petSetNum('walkSecs',this.value)"></div><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>「叫回家」待多久<br>（秒，0 = 一直待着）</label><input class="input" type="number" min="0" max="3600" step="5" value="${p.homeSecs}" onchange="petSetNum('homeSecs',this.value)"></div></div>
-<div class="field" style="max-width:320px;margin-top:8px"><label>优先心情出现概率 <span id="petMoodChLbl">${p.moodChance}</span>%<br>（其余随机换成别的心情；难过惩罚那天不受影响）</label><input type="range" min="0" max="100" step="5" value="${p.moodChance}" oninput="petSetPct('moodChance',this.value,'petMoodChLbl')"></div>
+<div class="field" style="max-width:320px;margin-top:8px"><label>优先心情出现概率 <span id="petMoodChLbl">${p.moodChance}</span>%<br></label><input type="range" min="0" max="100" step="5" value="${p.moodChance}" oninput="petSetPct('moodChance',this.value,'petMoodChLbl')"></div>
 <div class="field" style="max-width:320px;margin-top:8px"><label>坠落速度 <span id="petFallLbl">${p.fallLv}</span>（1 最慢 · 10 最快）</label><input type="range" min="1" max="10" step="1" value="${p.fallLv}" oninput="petSetFall(this.value)"></div>
-${pt.buddy?renderPetDuoSettings(pt):''}${petLxEligible(pt)?'<div class="flex" style="margin-top:10px"><button class="btn btn-soft btn-sm" onclick="petImportLx(\''+pt.id+'\')">📦 放入荔杏咪动图包</button><span class="muted" style="font-size:12px">已处理好、不闪、大小统一</span></div>':''}
+${pt.buddy?renderPetDuoSettings(pt):''}${petLxEligible(pt)?'<div class="flex" style="margin-top:10px"><button class="btn btn-soft btn-sm" onclick="petImportLx(\''+pt.id+'\')">📦 放入荔杏咪动图包</button></div>':''}
 <div class="mood-label" style="margin-top:12px">动作动图</div>
 ${renderPetActions(pt)}
-<div class="mood-label" style="margin-top:12px">心情分类（每类可放多张动图，展示时随机切换）</div>
+<div class="mood-label" style="margin-top:12px">心情分类</div>
 ${moods}
 <div class="flex" style="margin-top:10px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="petMoodAdd('${pt.id}')">＋ 添加心情分类</button><label class="btn btn-ghost btn-sm" title="选一个文件夹，里面的子文件夹名就是心情分类，如 02_开心">📁 按文件夹批量导入<input type="file" webkitdirectory multiple style="display:none" onchange="petImportFolder('${pt.id}',this)"></label>${canDel?'<button class="btn btn-ghost btn-sm" onclick="petDel(\''+pt.id+'\')">🗑 送走这只桌宠</button>':''}</div></div>`;
 }
@@ -1810,7 +1810,7 @@ function renderPetSchedule(){
     const picks=Array.isArray(s.picks)?s.picks:[];const open=_petSchedPick===s.id;
     return `<div class="item-card ps-sched" style="flex-wrap:wrap"><select class="select" onchange="petSchedSet('${s.id}','h',this.value)">${petHourOpts(hm[0])}</select><b>:</b><select class="select" onchange="petSchedSet('${s.id}','m',this.value)">${petMinOpts(hm[1])}</select><span class="muted">起展示</span><select class="select" style="flex:1;min-width:120px" onchange="petSchedSet('${s.id}','mood',this.value)">${petMoodOpts(s.mood)}</select><button class="btn btn-ghost btn-sm" onclick="petSchedPicker('${s.id}')">${open?'✓ 挑好了':'👆 挑动图'}${picks.length?'（'+picks.length+'）':''}</button><button class="ic-del" onclick="petSchedDel('${s.id}')" title="删除">✕</button>${open?'<div style="flex-basis:100%">'+renderImgPicker(petActive(),picks,'petSchedImg(\''+s.id+'\',','petSchedGroup(\''+s.id+'\',')+'</div>':''}</div>`;
   }).join('')||'<div class="empty-hint">还没有时间表</div>';
-  return `<p class="card-desc">这是「${esc(petActive().name)}」的时间表（每只桌宠各有一份，切换展示的桌宠就会换成它的）。到了设定的时间点，会优先展示对应的表情。</p>${rows}<button class="btn btn-pink btn-sm" style="margin-top:8px" onclick="petSchedAdd()">＋ 添加时间点</button>`;
+  return `<p class="card-desc">这是「${esc(petActive().name)}」的时间表；到了设定的时间点，会优先展示对应的表情。</p>${rows}<button class="btn btn-pink btn-sm" style="margin-top:8px" onclick="petSchedAdd()">＋ 添加时间点</button>`;
 }
 function petSchedAdd(){
   const p=ensurePetState();
@@ -2029,7 +2029,7 @@ function renderPetDuoSettings(pt){
   const p=ensurePetState();const d=pt.duo,A=esc(pt.name),B=esc(pt.buddy.name);
   const n=petAllImgs(pt).filter(x=>x.img.duo).length;
   return `<div class="pa-row" style="margin-top:12px"><div class="pa-head"><b>👯 和「${B}」的互动</b><span class="muted">${n} 张互动图</span></div>
-<div class="muted" style="font-size:12px;line-height:1.7;margin-top:4px">在下面「${A}」的心情分类里点缩略图，就能把它标成「两只的互动图」（带 👯 角标），也能移到别的分类（比如难过）。平时随机换表情不会换到互动图，按下面的间隔触发：互动时「${B}」被拽过去藏起来，时间到了再冒出来。难过惩罚那天只从难过分类里选，难过分类里的互动图照样会把「${B}」藏起来。</div>
+<div class="muted" style="font-size:12px;line-height:1.7;margin-top:4px"></div>
 <div class="row" style="margin-top:8px;flex-wrap:wrap;align-items:stretch"><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>平均多久互动一次<br>（秒，0 = 不自动互动）</label><input class="input" type="number" min="0" max="3600" step="10" value="${d.every}" onchange="petDuoSet('${pt.id}','every',this.value)"></div><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>每次互动多久<br>（秒）</label><input class="input" type="number" min="2" max="600" step="1" value="${d.secs}" onchange="petDuoSet('${pt.id}','secs',this.value)"></div></div>
 <div class="flex" style="margin-top:8px"><button class="btn btn-ghost btn-sm" onclick="petDuoTest('${pt.id}')">▶ 现在互动一次</button></div></div>`;
 }
@@ -6027,7 +6027,7 @@ fol:{name:'卵泡期',emoji:'🌱',color:'#A5D6A7',
   mood:'心情、专注力和动力都在回升，是一个周期里最「好用」的时候之一。',
   good:'开新项目、学新东西、啃难的内容、写方案、做计划；适合加大运动量。',
   avoid:'没什么特别要避开的，抓住状态好的时候多推进重要的事。'},
-ovu:{name:'排卵期',emoji:'🥚',color:'#CE93D8',
+ovu:{name:'排卵期',emoji:'🧬',color:'#CE93D8',
   body:'雌激素达到高峰后排卵，有的人会有一侧下腹轻微胀痛、分泌物变多变清亮，都正常。',
   mood:'精力和表达欲最高，自信、爱社交。',
   good:'上课、讲解、沟通、录视频、见人谈事、需要表现力的任务。',
@@ -6155,7 +6155,7 @@ function renderPeriodCard(){
       +cell('预计下次','<span class="pp-big">'+fmtMD(nx)+'</span>',dn>0?'还有 '+dn+' 天':dn===0?'预计今天':'已推迟 '+(-dn)+' 天')
       +'</div>';
     const dOvu=dDiff(today,ovuNext);
-    var perSub='<div class="pc-sub">🥚 预计排卵日 '+fmtMD(ovuNext)+'（'+(dOvu>0?'还有 '+dOvu+' 天':dOvu===0?'今天':'已过')+'）· 易孕期 '+fmtMD(ferA)+'–'+fmtMD(ferB)+(today>=ferA&&today<=ferB?'（现在）':'')+'</div>';
+    var perSub='<div class="pc-sub">🧬 预计排卵日 '+fmtMD(ovuNext)+'（'+(dOvu>0?'还有 '+dOvu+' 天':dOvu===0?'今天':'已过')+'）· 易孕期 '+fmtMD(ferA)+'–'+fmtMD(ferB)+(today>=ferA&&today<=ferB?'（现在）':'')+'</div>';
     // 周期条
     const C=Math.max(ph.cyc,ph.day);let bar='';
     for(let i=1;i<=C;i++){const d=dAdd(ph.start,i-1);const q=perPhaseOf(d);const k=q?q.ph:'lut';bar+='<span class="pc-seg'+(d===today?' now':'')+'" style="background:'+PER_PHASES[k].color+'" title="第 '+i+' 天 · '+PER_PHASES[k].name+'"></span>';}
@@ -6185,7 +6185,7 @@ ${hist?'<div class="mood-label" style="margin-top:12px">最近的记录（点日
 <details class="fee-fold" style="margin-top:10px"><summary>⚙️ 记录不够时用的默认值</summary><div class="row" style="gap:10px;margin-top:8px"><div class="field"><label>周期（天）</label><input type="number" min="15" max="60" value="${p.cycle}" onchange="perSetDefault('cycle',this.value)"></div><div class="field"><label>每次几天</label><input type="number" min="2" max="12" value="${p.len}" onchange="perSetDefault('len',this.value)"></div></div></details></div>`;
 }
 // 桌宠的阶段小贴士（一天最多一次，排在提醒和重要日子后面）
-const PER_PET_TIPS={men:'🌸 经期里精力低一点很正常，今天对自己温柔些，暖暖肚子～',fol:'🌱 卵泡期，状态在回升，适合推进新任务和难一点的内容！',ovu:'🥚 排卵期，表达欲和精力都在高峰，适合上课、沟通、录视频～',lut:'🍂 黄体期，适合收尾和整理，容易饿就备点健康小零食～',pms:'🌧️ 经前期，莫名低落或烦躁都很正常，是激素在作怪，不是你的问题。少排点事，早点睡～',late:'⏳ 例假推迟了几天，放轻松，压力和作息都会影响它～'};
+const PER_PET_TIPS={men:'🌸 经期里精力低一点很正常，今天对自己温柔些，暖暖肚子～',fol:'🌱 卵泡期，状态在回升，适合推进新任务和难一点的内容！',ovu:'🧬 排卵期，表达欲和精力都在高峰，适合上课、沟通、录视频～',lut:'🍂 黄体期，适合收尾和整理，容易饿就备点健康小零食～',pms:'🌧️ 经前期，莫名低落或烦躁都很正常，是激素在作怪，不是你的问题。少排点事，早点睡～',late:'⏳ 例假推迟了几天，放轻松，压力和作息都会影响它～'};
 
 /* ===================== 日历：每日完成记录 + 经期 + 预排今日目标 + 提醒 + 重要日子 ===================== */
 // state.cal={plans:{日期:[任务id]},reminders:{日期:[{id,text,done}]},events:[{id,date,name,emoji,yearly}],applied,barHide,petSaid}
@@ -6556,7 +6556,7 @@ function renderStkTray(){
   const tabs='<button class="tray-tab'+(tab==='all'?' on':'')+'" title="全部" style="--tc:#FFFFFF" onclick="window._trayCat=\'all\';renderDetail()"><span class="tt-ic">✨</span></button>'
     +cats.map((c,i)=>'<button class="tray-tab'+(tab===c.name?' on':'')+'" style="--tc:'+TRAY_TAB_C[i%TRAY_TAB_C.length]+'" title="'+esc(c.name)+'" onclick="window._trayCat='+esc(JSON.stringify(c.name))+';renderDetail()"><img src="'+esc(c.items[0].src)+'" alt="'+esc(c.name)+'"></button>').join('');
   const items=list.map(it=>'<button class="tray-it'+(it.id===cur?' on':'')+'" data-k="'+esc((it.name+' '+it.kw).toLowerCase())+'" title="'+esc(it.name)+'" onclick="stkPutDay(\''+it.id.replace(/'/g,"\\'")+'\')"><img loading="lazy" src="'+esc(it.src)+'" alt=""></button>').join('');
-  return '<div class="hb-tray"><div class="hb-tray-h"><span>贴到 <b>'+fmtMD(d)+'</b>'+(state.diaryDay?'':'（今天）')+' <span class="muted">· 先在日历上点哪天就贴哪天</span></span><span style="flex:1"></span>'+(cur?'<button class="vm-btn sm" onclick="stkPutDay(null)">揭掉</button>':'')+'<button class="vm-btn sm" onclick="openShop()">🏪 去兑换</button></div>'
+  return '<div class="hb-tray"><div class="hb-tray-h"><span>贴到 <b>'+fmtMD(d)+'</b>'+(state.diaryDay?'':'（今天）')+' </span><span style="flex:1"></span>'+(cur?'<button class="vm-btn sm" onclick="stkPutDay(null)">❌揭掉</button>':'')+'<button class="vm-btn sm" onclick="openShop()">🏪 去兑换</button></div>'
     +(all.length?'<div class="tray-tabs">'+tabs+'</div><div class="tray-panel"><input class="tray-q" placeholder="🔍 搜我的贴纸" value="'+esc(window._trayQ||'')+'" oninput="window._trayQ=this.value;trayFilter(this)"><div class="hb-tray-list">'+items+'</div></div>':'<div class="muted" style="font-size:13px;padding:6px 2px">还没有贴纸～去「🏪 小卖部」用猫爪币兑换吧</div>')+'</div>';
 }
 function trayFilter(inp){const q=(inp.value||'').trim().toLowerCase();inp.parentNode.querySelectorAll('.tray-it').forEach(b=>{b.style.display=!q||b.dataset.k.includes(q)?'':'none';});}
@@ -6590,7 +6590,7 @@ function renderCalendarCard(daysMap){
     const cls=['mc-cell',key<today?'past':'',phc,key===today?'today':'',key===state.diaryDay?'sel':''].filter(Boolean).join(' ');
     const marks=[];
     const mi=calMoodIcons(dd);
-    if(q&&key===q.ovu)marks.push('<span title="预计排卵日">🥚</span>');
+    if(q&&key===q.ovu)marks.push('<span title="预计排卵日">🧬</span>');
     if(dd&&dd.done.length)marks.push('<span class="mc-done">✓'+dd.done.length+'</span>');
     if(dd&&dd.notes.length)marks.push('<span>📝</span>');
     if(plan)marks.push('<span>🎯'+(plan>1?plan:'')+'</span>');
@@ -6617,7 +6617,7 @@ function renderCalendarCard(daysMap){
 <div class="hb-week">${['一','二','三','四','五','六','日'].map(x=>'<span>'+x+'</span>').join('')}</div>
 <div class="mc-grid hb-grid">${cells}</div></div>
 ${renderCalToolbar()}
-<div class="hb-legend">✓ 完成的任务 · 📝 笔记 · 🎯 预排目标 · 🔔 提醒 · 底色跟着身体阶段变：粉色经期（条纹是预测）· 绿色卵泡期 · 紫色排卵期 · 橙色黄体期 · 蓝色经前期 · 🥚 排卵日 · 点某一天可以贴贴纸、看详情、安排事情</div>
+<div class="hb-legend">📋 完成的任务 · 📝 笔记 · 🎯 预排目标 · 🔔 提醒 · 底色跟着身体阶段变：🩷经期（条纹预测）· 💚卵泡期 · 💜排卵期 · 🧡黄体期 · 💙经前期 · 🧬 排卵日 · 点看详情、安排事情</div>
 ${dayPanel}${soonHtml?'<div class="mood-label" style="margin-top:14px">⏳ 接下来</div>'+soonHtml:''}</div>`;
 }
 
@@ -6641,15 +6641,15 @@ function renderCalDay(d,dd){
   if(dq&&!inLog){const P=PER_PHASES[dq.ph];perHtml=P.emoji+' '+P.name+' · 周期第 '+dq.day+' 天'+(d>=dq.fer[0]&&d<=dq.fer[1]?' · 易孕期':'')+(d===dq.ovu?' · 预计排卵日':'')+(perHtml?'<br>'+perHtml:'');}
   if(perHtml)h+='<div class="mc-sec mc-per">'+perHtml+'</div>';
   // 完成记录 + 笔记
-  if(dd.done.length)h+='<div class="mc-sec"><div class="mood-label">✅ 完成的任务</div><div class="diary-tasks">'+dd.done.map(x=>'<div class="ddone"><div class="c on">✓</div><div class="t">'+esc(x.name)+'</div></div>').join('')+'</div></div>';
+  if(dd.done.length)h+='<div class="mc-sec"><div class="mood-label">📋 完成的任务</div><div class="diary-tasks">'+dd.done.map(x=>'<div class="ddone"><div class="c on">✓</div><div class="t">'+esc(x.name)+'</div></div>').join('')+'</div></div>';
   if(dd.notes.length)h+='<div class="mc-sec"><div class="mood-label">📝 笔记</div>'+dd.notes.map(n=>'<div class="item-card"><div class="ic-main"><div class="ic-title">'+esc(n.name)+'</div>'+(n.notes?'<div class="ic-body">'+esc(n.notes)+'</div>':'')+((n.images&&n.images.length)?'<div class="note-img-grid">'+n.images.map(im=>{const s=imgSrc(im);return '<div class="note-img-item"><img src="'+esc(s)+'" onclick="window.open(\''+esc(s)+'\',\'_blank\')" title="点击查看大图"></div>';}).join('')+'</div>':'')+'</div></div>').join('')+'</div>';
   if(d<today&&!dd.done.length&&!dd.notes.length)h+='<div class="mc-sec muted" style="font-size:13px">这一天没有完成记录和笔记</div>';
   // 安排
   if(canPlan){
-    h+='<div class="mc-sec"><div class="mood-label">🎯 '+(d===today?'今天':'这天')+'的今日目标（到那天自动放进今日目标）</div>'+(plans.length?'<div class="mood-chips">'+plans.map(t=>'<span class="mood-chip on">'+esc(t.icon+' '+t.name)+' <a class="per-link" onclick="calDelPlan(\''+d+'\',\''+t.id+'\')">×</a></span>').join('')+'</div>':'')+(d>today?'<div class="mc-add"><select id="calPlanSel">'+taskOpts+'</select><button class="btn btn-soft btn-sm" onclick="calAddPlan(\''+d+'\')">＋ 安排</button></div>':'<div class="muted" style="font-size:12px">今天的直接在任务上点「☆ 设为今日目标」就好</div>')+'</div>';
+    h+='<div class="mc-sec"><div class="mood-label">🎯 '+(d===today?'今天':'这天')+'的今日目标</div>'+(plans.length?'<div class="mood-chips">'+plans.map(t=>'<span class="mood-chip on">'+esc(t.icon+' '+t.name)+' <a class="per-link" onclick="calDelPlan(\''+d+'\',\''+t.id+'\')">×</a></span>').join('')+'</div>':'')+(d>today?'<div class="mc-add"><select id="calPlanSel">'+taskOpts+'</select><button class="btn btn-soft btn-sm" onclick="calAddPlan(\''+d+'\')">＋ 安排</button></div>':'<div class="muted" style="font-size:12px">今天的直接在任务上点「☆ 设为今日目标」就好</div>')+'</div>';
   }
   if(d>=today){
-    h+='<div class="mc-sec"><div class="mood-label">🔔 提醒（那天在总览顶部显示，桌宠也会提一次）</div>'+rems.map(r=>'<div class="sess-row"><span'+(r.done?' style="text-decoration:line-through;opacity:.6"':'')+'>'+esc(r.text)+'</span><button class="ic-del" onclick="calDelRem(\''+d+'\',\''+r.id+'\')" title="删除">×</button></div>').join('')+'<div class="mc-add"><input id="calRemInp" placeholder="比如：交房租、给学生发作业" onkeydown="if(event.key===\'Enter\')calAddRem(\''+d+'\')"><button class="btn btn-soft btn-sm" onclick="calAddRem(\''+d+'\')">＋</button></div></div>';
+    h+='<div class="mc-sec"><div class="mood-label">🔔 提醒</div>'+rems.map(r=>'<div class="sess-row"><span'+(r.done?' style="text-decoration:line-through;opacity:.6"':'')+'>'+esc(r.text)+'</span><button class="ic-del" onclick="calDelRem(\''+d+'\',\''+r.id+'\')" title="删除">×</button></div>').join('')+'<div class="mc-add"><input id="calRemInp" placeholder="比如：交房租、给学生发作业" onkeydown="if(event.key===\'Enter\')calAddRem(\''+d+'\')"><button class="btn btn-soft btn-sm" onclick="calAddRem(\''+d+'\')">＋</button></div></div>';
   }
   h+='<details class="fee-fold mc-sec"><summary>⭐ 把这天设为重要日子</summary><div class="mc-add" style="margin-top:8px"><select id="calEvEmoji">'+CAL_EMOJI.map(e=>'<option>'+e+'</option>').join('')+'</select><input id="calEvName" placeholder="比如：妈妈生日、纪念日"><label class="ans-switch"><input type="checkbox" id="calEvYearly" checked> 每年</label><button class="btn btn-soft btn-sm" onclick="calAddEvent(\''+d+'\')">＋</button></div></details>';
   return h+'</div>';
