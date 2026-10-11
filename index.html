@@ -625,8 +625,8 @@ textarea.fee-preview{width:100%;border:1px solid var(--line);font-family:inherit
 @media(max-width:600px){.pp-big{font-size:22px}.pp-val{font-size:14px}}
 .hb-card{padding:14px}
 .game-room.hb-room{touch-action:auto;-webkit-user-select:auto;user-select:auto;background:var(--cal-l,#FFF0F6);border:none;border-radius:22px;padding:0 10px 12px;margin-bottom:10px;--cal-c:#F4A6C6;--cal-ink:#fff;--cal-d:#9C4A73}
-.hb-hero{position:relative;height:200px;margin:0 -10px;overflow:hidden;border-radius:22px 22px 0 0}
-.hb-room .hb-hero .bg{background-position:center;transition:background-position .3s}
+.hb-hero{position:relative;height:450px;margin:0 -10px;overflow:hidden;border-radius:22px 22px 0 0}
+.hb-room .hb-hero .bg{background-position:center var(--bg-y,50%);transition:background-position .3s}
 .hb-month{position:absolute;left:14px;top:12px;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.82);border-radius:16px;padding:6px 14px 8px;color:var(--cal-d);box-shadow:0 2px 8px rgba(0,0,0,.06);line-height:1.05}
 .hb-month b{font-size:42px;font-weight:800}.hb-month span{font-size:17px;font-weight:700}.hb-month i{font-style:normal;font-size:12px;opacity:.8}
 .hb-tools{position:absolute;right:10px;top:10px;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
@@ -645,7 +645,7 @@ textarea.fee-preview{width:100%;border:1px solid var(--line);font-family:inherit
 .stk-cur{width:56px;height:56px;object-fit:contain}
 @media(max-width:600px){
 .hb-card{padding:10px}
-.game-room.hb-room{padding:0 4px 8px}.hb-hero{height:140px;margin:0 -4px}
+.game-room.hb-room{padding:0 4px 8px}.hb-hero{height:260px;margin:0 -4px}
 .hb-month{left:10px;top:8px;padding:4px 10px 6px}.hb-month b{font-size:28px}.hb-month span{font-size:13px}
 .hb-tools button{width:28px;height:28px;font-size:12px}
 .hb-week{font-size:12px;padding:5px 0;margin:8px 0 6px}
@@ -713,7 +713,7 @@ details.add-class-box[open]>summary{margin-bottom:10px}
 .ans-box.off{opacity:.75}
 .ans-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .ans-switch{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;cursor:pointer}
-.ans-switch input{width:auto;margin:0}
+.ans-switch input,.modal .ans-switch input,.mc-add .ans-switch input{width:auto;min-width:0;flex:none;margin:0;padding:0}
 .ans-list{margin:8px 0 0;padding-left:22px;font-size:14px;line-height:1.8}
 .ans-list li::marker{color:var(--pink-deep);font-weight:700}
 .day-chips{gap:6px;flex-wrap:nowrap}
@@ -1643,8 +1643,12 @@ function closePetSettings(){document.getElementById('modalBox').classList.remove
 function petSettingsTab(tab){
   _petSettingsTab=tab;const box=document.getElementById('modalBox');if(!box)return;
   const body=box.querySelector('.ps-body');const top=body?body.scrollTop:0;const boxTop=box.scrollTop;
+  const same=body&&body.dataset.tab===tab;
+  const opened=same?[...body.querySelectorAll('details')].map(d=>d.open):[];
   box.innerHTML=petSettingsHtml();
-  const nb=box.querySelector('.ps-body');if(nb)nb.scrollTop=top;box.scrollTop=boxTop;
+  const nb=box.querySelector('.ps-body');
+  if(nb&&same)nb.querySelectorAll('details').forEach((d,i)=>{if(opened[i])d.open=true;});
+  if(nb)nb.scrollTop=top;box.scrollTop=boxTop;
 }
 function petSettingsHtml(){
   const tabs=[['bg','🖼️ 背景'],['pet','🐾 桌宠'],['talk','💬 气泡'],['sched','🕘 时间表']];
@@ -1654,7 +1658,7 @@ function petSettingsHtml(){
   else if(_petSettingsTab==='pet')body=renderPetManager();
   else if(_petSettingsTab==='talk')body=renderPetTalk();
   else body=renderPetSchedule();
-  return '<div class="ps-head"><h3>⚙️ 背景与桌宠设置</h3><button class="ic-del" onclick="closePetSettings()" title="关闭">✕</button></div>'+nav+'<div class="ps-body">'+body+'</div>';
+  return '<div class="ps-head"><h3>⚙️ 背景与桌宠设置</h3><button class="ic-del" onclick="closePetSettings()" title="关闭">✕</button></div>'+nav+'<div class="ps-body" data-tab="'+_petSettingsTab+'">'+body+'</div>';
 }
 function renderPetManager(){
   const p=ensurePetState();
@@ -1699,8 +1703,8 @@ function renderPetEditCard(pt,canDel){
   }).join('');
   return `<div class="item-card" style="display:block;margin-top:14px"><div class="row"><div class="field" style="flex:2"><label>名字</label><input class="input" value="${esc(pt.name)}" onchange="petRename('${pt.id}',this.value)"></div><div class="field" style="max-width:200px"><label>大小（${PET_DEV_NAME[petDevKind()]}） <span id="petSizeLbl">${petSizeOf(pt)}</span>%</label><input type="range" min="50" max="250" step="5" value="${petSizeOf(pt)}" oninput="petResize('${pt.id}',this.value)"><div class="muted" style="font-size:11px;margin-top:2px">电脑、平板、手机各记各的</div></div></div>
 <div class="row" style="margin-top:8px;flex-wrap:wrap;align-items:stretch"><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>换表情间隔<br>（秒，0 = 不自动换）</label><input class="input" type="number" min="0" max="3600" step="10" value="${p.moodSecs}" onchange="petSetNum('moodSecs',this.value)"></div><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>沿边爬动间隔<br>（秒，0 = 待在右下角不动）</label><input class="input" type="number" min="0" max="3600" step="10" value="${p.walkSecs}" onchange="petSetNum('walkSecs',this.value)"></div><div class="field" style="min-width:150px;display:flex;flex-direction:column;justify-content:flex-end"><label>「叫回家」待多久<br>（秒，0 = 一直待着）</label><input class="input" type="number" min="0" max="3600" step="5" value="${p.homeSecs}" onchange="petSetNum('homeSecs',this.value)"></div></div>
-<div class="field" style="max-width:320px;margin-top:8px"><label>优先心情出现概率 <span id="petMoodChLbl">${p.moodChance}</span>%<br>（其余随机换成别的心情；难过惩罚那天不受影响）</label><input type="range" min="0" max="100" step="5" value="${p.moodChance}" oninput="petSetPct('moodChance',this.value,'petMoodChLbl')"></div>
-<div class="field" style="max-width:320px;margin-top:8px"><label>坠落速度 <span id="petFallLbl">${p.fallLv}</span>（1 最慢 · 10 最快）</label><input type="range" min="1" max="10" step="1" value="${p.fallLv}" oninput="petSetFall(this.value)"></div>
+<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:16px"><div class="field" style="flex:1;min-width:150px;max-width:220px" title="其余随机换成别的心情；难过惩罚那天不受影响"><label>优先心情概率 <span id="petMoodChLbl">${p.moodChance}</span>%</label><input type="range" min="0" max="100" step="5" value="${p.moodChance}" oninput="petSetPct('moodChance',this.value,'petMoodChLbl')" style="width:100%"></div>
+<div class="field" style="flex:1;min-width:150px;max-width:220px" title="1 最慢 · 10 最快"><label>坠落速度 <span id="petFallLbl">${p.fallLv}</span>（1慢·10快）</label><input type="range" min="1" max="10" step="1" value="${p.fallLv}" oninput="petSetFall(this.value)" style="width:100%"></div></div>
 ${pt.buddy?renderPetDuoSettings(pt):''}${petLxEligible(pt)?'<div class="flex" style="margin-top:10px"><button class="btn btn-soft btn-sm" onclick="petImportLx(\''+pt.id+'\')">📦 放入荔杏咪动图包</button><span class="muted" style="font-size:12px">已处理好、不闪、大小统一</span></div>':''}
 <div class="mood-label" style="margin-top:12px">动作动图</div>
 ${renderPetActions(pt)}
@@ -3058,9 +3062,17 @@ function endDecoDrag(e){
 function getBgSlots(){return state.bgSlots||0;}
 function findSelectedBg(){return (state.customBgs||[]).find(b=>b&&b.id===state.selectedBg);}
 function currentBgSrc(){const b=findSelectedBg();return b?imgSrc(b):'';}
+function bgPosY(){const v=parseInt(state.bgPosY);return isNaN(v)?50:Math.max(0,Math.min(100,v));}
+function bgSetPosY(v){
+  state.bgPosY=Math.max(0,Math.min(100,parseInt(v)||0));
+  const l=document.getElementById('bgPosLbl');if(l)l.textContent=state.bgPosY;
+  document.querySelectorAll('.hb-hero').forEach(h=>h.style.setProperty('--bg-y',state.bgPosY+'%'));
+  clearTimeout(bgSetPosY._t);bgSetPosY._t=setTimeout(save,500);
+}
 function renderBgPanel(){
   const slots=getBgSlots();
-  let html='<div class="deco-panel"><h3>🖼️ 我的背景</h3><div class="desc">已完成 '+state.completedTotal+' 个任务 · 已解锁 '+slots+' 张自定义背景 · 每完成20个任务解锁一张新背景。点击缩略图即可切换当前背景。</div><div class="deco-slots">';
+  let html='<div class="deco-panel"><h3>↕️ 日历头图的上下位置</h3><div class="desc">头图固定高 450px，拖动滑块调整显示图片的哪一部分（0% = 靠上，100% = 靠下）。</div><div class="field" style="max-width:320px;margin:0"><label>位置 <span id="bgPosLbl">'+bgPosY()+'</span>%</label><input type="range" min="0" max="100" step="1" value="'+bgPosY()+'" oninput="bgSetPosY(this.value)"></div></div>'
+  +'<div class="deco-panel"><h3>🖼️ 我的背景</h3><div class="desc">已完成 '+state.completedTotal+' 个任务 · 已解锁 '+slots+' 张自定义背景 · 每完成20个任务解锁一张新背景。点击缩略图即可切换当前背景。</div><div class="deco-slots">';
   html+='<div class="deco-slot filled'+(state.selectedBg?'':' selected')+'" onclick="selectBg(null)" title="使用默认背景"><span style="font-size:20px">☁️</span><span style="font-size:9px">默认背景</span></div>';
   if(slots===0){
     html+='</div><div class="deco-empty">继续完成任务，每20个可解锁一张自定义背景 ✨</div></div>';
@@ -6611,7 +6623,7 @@ function renderCalendarCard(daysMap){
   const bgSrc=currentBgSrc();
   setTimeout(()=>calColorNow(hex=>calApplyColor(document.getElementById('hbCal'),hex)),0);
   return `<div class="card hb-card"><div class="game-room hb-room${calStyle().stkOutline===false?'':' stk-ol'}" id="hbCal" style="font-family:${calFontCss().replace(/"/g,'&quot;')}">
-<div class="hb-hero"><div class="bg"${bgSrc?' style="background-image:url(\''+esc(bgSrc)+'\')"':''}></div>
+<div class="hb-hero" style="--bg-y:${bgPosY()}%"><div class="bg"${bgSrc?' style="background-image:url(\''+esc(bgSrc)+'\')"':''}></div>
 <div class="hb-month"><b>${m}</b><span>${CAL_MON_EN[m-1]}</span><i>${y}</i></div>
 </div>
 <div class="hb-week">${['一','二','三','四','五','六','日'].map(x=>'<span>'+x+'</span>').join('')}</div>
