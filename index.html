@@ -571,6 +571,27 @@ button.pm-thumb.on{border-color:var(--pink-deep);box-shadow:0 0 0 2px rgba(255,2
 .nom-f{font-family:"NomSub","NomExt","Nom Na Tong","NomKaiExt","Noto Serif SC","Songti SC",serif}
 .nom-pk{font-weight:700;min-width:34px}.nom-pk.on{background:var(--pink-deep);color:#fff;border-color:var(--pink-deep)}
 .nom-sq-head{font-size:12px;margin:8px 0 6px}.nom-sq-list{margin-top:6px}.nom-card-x{border-left-color:#D9CCF5}
+#modalBox.modal-nom{max-width:440px}
+.nom-big{position:relative}.nom-mark{position:absolute;right:-4px;top:-6px;font-size:13px}
+.nom-card.open{border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:0}
+.nom-detail{display:none}.nom-detail.on{display:block;background:#FFFCFD;border:1px solid var(--line);border-top:none;border-left:4px solid var(--pink-2);border-radius:0 0 var(--radius-s) var(--radius-s);padding:4px 14px 12px;margin-bottom:9px}
+.nd-label{font-size:12.5px;font-weight:600;color:var(--pink-deep);margin:10px 0 4px}.nd-label .muted{font-weight:400;font-size:11.5px}
+.nd-words{font-size:13.5px;line-height:2;color:var(--ink)}
+.nd-w{white-space:nowrap}.nd-w b{font-weight:400;font-size:19px;color:#3E2E44}
+.nd-sep{color:#D8C4D0;margin:0 7px}.nd-more{font-size:12.5px;color:var(--pink-deep)}.nd-empty{font-size:12.5px}
+.nd-say{font-size:13.5px;line-height:1.8}.nd-say b{font-weight:400;font-size:19px;margin-right:4px}.nd-say .muted{font-size:12.5px}
+.nd-my{width:100%;box-sizing:border-box;min-height:70px;font-size:16px;line-height:1.7;padding:8px 10px;border:1px dashed var(--pink-2);border-radius:10px;background:#fff;resize:vertical;font-family:"NomSub","NomExt","Nom Na Tong",inherit}
+.nom-click{cursor:pointer}.nom-click:hover{background:#FFF6FA}
+.nd-act{font-weight:400;font-size:12px;margin-left:10px;color:var(--ink-soft);text-decoration:none}.nd-act:hover{color:var(--pink-deep)}
+.nd-w.mine b{color:#7A4FB5}
+.nd-edit{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto;padding-right:2px}
+.nd-row{display:flex;gap:6px;align-items:center}
+.nd-row input{font-family:inherit;font-size:13px;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;min-width:0}
+.nd-row .nd-in-n{width:34%;font-size:17px;font-family:"NomSub","NomExt","Nom Na Tong",inherit}.nd-row .nd-in-w{flex:1}
+.nd-x{border:none;background:none;cursor:pointer;color:var(--ink-soft);font-size:16px;padding:0 4px}.nd-x:hover{color:#C0392B}
+.nd-edit-btns{display:flex;gap:6px;align-items:center;margin-top:6px;font-size:12.5px}.nd-edit-btns a{color:var(--pink-deep);text-decoration:none}
+.nd-note{margin-top:10px}.nd-note summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--pink-deep);padding:2px 0}.nd-note summary .muted{font-weight:400}
+.nd-note[open] summary{margin-bottom:4px}
 .nom-search{margin:4px 0 8px}
 .nom-sq{width:100%;box-sizing:border-box;font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-family:inherit}
 .nom-sq-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:300px;overflow-y:auto}
@@ -635,13 +656,6 @@ body.ns-open{overflow:hidden}
 .nw-head{display:flex;align-items:center;justify-content:space-between;font-size:16px;color:var(--pink-deep)}
 .nw-x{border:none;background:none;font-size:24px;cursor:pointer;color:var(--ink-soft);line-height:1}
 .nw-sub{font-size:13px;color:var(--ink-soft);margin:4px 0 10px}.nw-sub .nom-f{font-size:20px;color:#3E2E44;vertical-align:-2px}.nw-sub b{color:var(--ink)}
-.nw-stage{position:relative;width:min(300px,100%);aspect-ratio:1;margin:0 auto;border:2px solid #F0B9D0;border-radius:14px;background:#FFFCFD;overflow:hidden;touch-action:none}
-.nw-grid{position:absolute;inset:0;width:100%;height:100%}.nw-grid path{stroke:#F3CFE0;stroke-width:.5;stroke-dasharray:2 2;fill:none;vector-effect:non-scaling-stroke}
-.nw-stage canvas,#nwHW{position:absolute;inset:0}
-#nwHW{display:none}.nw-stage.hw #nwHW{display:block}.nw-stage.hw canvas{display:none}
-#nwGhost{transition:filter .3s}#nwGhost.demo{filter:brightness(.45) saturate(1.6)}
-.nw-tip{font-size:12.5px;color:var(--ink-soft);text-align:center;margin:10px 0 8px;min-height:18px;line-height:1.6}
-.nw-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.nw-btns small{opacity:.7;font-size:11px}
 .gw-panel{padding-top:12px}
 .gw-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:13px}
 .gw-sel{font-family:inherit;font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:#fff}
@@ -5430,12 +5444,13 @@ function nomLearnView(t,g){
   if(!list.length)return h+'<div class="empty-hint">823 个喃字全部学完啦 🎉</div>';
   h+=list.map(r=>nomCard(t,r.x,r.i)).join('');
   h+='<div class="gw-btns"><button class="btn btn-ghost btn-sm" onclick="nomStep(\''+t.id+'\',-1)"'+(start<=0?' disabled':'')+'>‹ 上几个</button><button class="btn btn-pink btn-sm" onclick="nomDone(\''+t.id+'\')">✓ 这 '+list.length+' 个学完了</button></div>';
-  h+='<div class="nom-foot">字表和读音按 chunom.org 的分级字表（一级最常用）。自造喃字大多是「表义部件 ＋ 表音部件」拼成的，看结构时可以想想哪一半提示读音、哪一半提示意思。点大字可以按笔顺练写，「📄 字帖」可以生成字帖直接在平板上写或导出 PDF 打印。</div>';
+  h+='<div class="nom-foot">字表和读音按 chunom.org 的分级字表（一级最常用）。自造喃字大多是「表义部件 ＋ 表音部件」拼成的，看结构时可以想想哪一半提示读音、哪一半提示意思。点大字展开字卡（含这个字的词语和你自己的收集），「📄 字帖」可以生成字帖直接在平板上写或导出 PDF 打印。</div>';
   return h;
 }
 function nomCard(t,x,i){
   const rd=x[1].split('/');
-  return '<div class="nom-card"><button class="nom-big nom-k" onclick="nomWrite(\''+t.id+'\','+i+')" title="点一下练写">'+esc(x[0])+'</button><div class="nom-info"><div class="nom-rd">'+rd.map((r,k)=>k?'<span class="nom-rd2">'+esc(r)+'</span>':'<b>'+esc(r)+'</b>').join(' ')+' <span class="tag '+(x[5]?'tag-pink':'tag-blue')+'">'+(x[5]?'自造喃字':'借用汉字')+'</span></div><div class="nom-m">'+esc(x[2])+'</div>'+(x[3]&&nomIds(x[3])?'<div class="nom-ids">'+nomIds(x[3])+'</div>':'')+'</div><div class="nom-ops"><button class="btn btn-ghost btn-sm" onclick="nomWrite(\''+t.id+'\','+i+')" title="练写">🖌️</button>'+nomPkBtn(t,x[0],'')+'</div></div>';
+  const g=gwState(t);const noted=!!(g.nmNotes&&g.nmNotes[x[0]]);const open=_nomOpen.has(i);
+  return '<div class="nom-card nom-click'+(open?' open':'')+'" data-i="'+i+'" data-c="'+esc(x[0])+'" onclick="nomInfo(\''+t.id+'\','+i+')" title="点一下展开 / 收起字卡"><button class="nom-big nom-k" tabindex="-1">'+esc(x[0])+'<span class="nom-mark" title="写过「我的收集」"'+(noted?'':' style="display:none"')+'>📝</span></button><div class="nom-info"><div class="nom-rd">'+rd.map((r,k)=>k?'<span class="nom-rd2">'+esc(r)+'</span>':'<b>'+esc(r)+'</b>').join(' ')+' <span class="tag '+(x[5]?'tag-pink':'tag-blue')+'">'+(x[5]?'自造喃字':'借用汉字')+'</span></div><div class="nom-m">'+esc(x[2])+'</div>'+(x[3]&&nomIds(x[3])?'<div class="nom-ids">'+nomIds(x[3])+'</div>':'')+'</div><div class="nom-ops">'+nomPkBtn(t,x[0],'')+'</div></div><div class="nom-detail'+(open?' on':'')+'" data-i="'+i+'">'+(open?nomDetail(t,i):'')+'</div>';
 }
 /* 学字页：搜字（读音 / 喃字 / 中文意思）＋「我选的字」，选好的字可以直接生成字帖（gw.nmPick，会同步） */
 function nomPickBar(t,g){
@@ -5468,7 +5483,7 @@ function nomSearchHits(q){
 }
 function nomPkBtn(t,c,rd){
   const on=((gwState(t).nmPick)||[]).includes(c);
-  return '<button class="btn btn-ghost btn-sm nom-pk'+(on?' on':'')+'" data-pk="'+esc(c)+'" onclick="nomPickToggle(\''+t.id+'\',\''+c+'\',\''+esc(rd||'')+'\')" title="放进 / 去掉「我选的字」（用来生成字帖）">'+(on?'✓':'＋')+'</button>';
+  return '<button class="btn btn-ghost btn-sm nom-pk'+(on?' on':'')+'" data-pk="'+esc(c)+'" onclick="event.stopPropagation();nomPickToggle(\''+t.id+'\',\''+c+'\',\''+esc(rd||'')+'\')" title="放进 / 去掉「我选的字」（用来生成字帖）">'+(on?'✓':'＋')+'</button>';
 }
 function nomSearchRes(t,g){
   const q=(g.nmSq||'').trim();if(!q)return '';
@@ -5478,7 +5493,7 @@ function nomSearchRes(t,g){
   let h='<div class="nom-sq-list">'+main.slice(0,30).map(i=>nomCard(t,NOM_CHARS[i],i)).join('')+'</div>';
   if(main.length>30)h+='<div class="muted nom-sq-more">还有 '+(main.length-30)+' 个，搜得再具体一点吧</div>';
   if(more.length)h+='<div class="muted nom-sq-more">词库里的其他字（不在 823 个学字表里，可以放进字帖）：</div><div class="nom-sq-list">'+more.map(c=>{const r=nomPickRd(g,c)||rd||nomReadingOf(c);return '<div class="nom-card nom-card-x"><span class="nom-big nom-k" style="cursor:default">'+esc(c)+'</span><div class="nom-info"><div class="nom-rd"><b>'+esc(r)+'</b> <span class="tag">学字表外</span></div></div><div class="nom-ops">'+nomPkBtn(t,c,rd)+'</div></div>';}).join('')+'</div>';
-  return '<div class="nom-sq-head muted">搜到的字（点大字练写，点 ＋ 放进「我选的字」）</div>'+h;
+  return '<div class="nom-sq-head muted">搜到的字（点大字展开字卡，点 ＋ 放进「我选的字」）</div>'+h;
 }
 function nomSearch(tid,v){const t=getTask(tid);if(!t)return;const g=gwState(t);g.nmSq=v;const el=document.getElementById('nomSqRes');if(el)el.innerHTML=nomSearchRes(t,g);clearTimeout(nomSearch._s);nomSearch._s=setTimeout(save,800);}
 function nomPickRefresh(t,g){const p=g.nmPick||[];document.querySelectorAll('.nom-pk[data-pk]').forEach(b=>{const on=p.includes(b.dataset.pk);b.classList.toggle('on',on);b.textContent=on?'✓':'＋';});const b=document.getElementById('nomPickBar');if(b)b.outerHTML=nomPickBar(t,g);}
@@ -5508,68 +5523,102 @@ function nomSpeak(text){
 }
 /* 练写：笔顺数据在 fonts/nom-strokes.json（借用汉字来自 hanzi-writer 的数据；自造喃字按部件的笔顺规则拼出来，
    带 c:1 标记）；hanzi-writer 库在 lib/ 里，离线也能用。只有极少数没有数据的字才用描红 */
-let _nw=null,_nomHWP=null,_nomSDP=null;
+let _nomSDP=null;
 function nomLoadScript(src,alt){
   return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>{if(!alt){rej();return;}const s2=document.createElement('script');s2.src=alt;s2.onload=res;s2.onerror=rej;document.head.appendChild(s2);};document.head.appendChild(s);});
-}
-function nomLoadHW(){
-  if(window.HanziWriter)return Promise.resolve();
-  if(!_nomHWP)_nomHWP=nomLoadScript('lib/hanzi-writer.min.js','https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.2/dist/hanzi-writer.min.js').catch(e=>{_nomHWP=null;throw e;});
-  return _nomHWP;
 }
 function nomStrokeData(){
   if(!_nomSDP)_nomSDP=(window.NOM_STROKES?Promise.resolve():nomLoadScript('fonts/nom-strokes.js?v=3')).then(()=>{if(!window.NOM_STROKES)throw 0;return window.NOM_STROKES;}).catch(e=>{_nomSDP=null;throw e;});
   return _nomSDP;
 }
 const NOM_KAI='NomKai,NomSub,NomKaiExt,NomExt,"Han-Nom Kai","Nom Na Tong",serif';
-function nomWrite(tid,i){
-  const x=NOM_CHARS[i];if(!x)return;
-  const box=document.getElementById('modalBox');box.classList.add('modal-nom');
-  box.innerHTML='<div class="nw-head"><b>🖌️ 练写 · Luyện viết</b><button class="nw-x" onclick="nomWriteClose()">×</button></div>'
-    +'<div class="nw-sub"><span class="nom-k">'+esc(x[0])+'</span> <b>'+esc(x[1].split('/').join(' / '))+'</b> · '+esc(x[2].split('（')[0].split('｜')[0])+'</div>'
-    +'<div class="nw-stage" id="nwStage"><svg class="nw-grid" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 0L100 100M100 0L0 100M50 0V100M0 50H100" /></svg><canvas id="nwGhost"></canvas><canvas id="nwCv"></canvas><div id="nwHW"></div></div>'
-    +'<div class="nw-tip" id="nwTip">准备中…</div>'
-    +'<div class="nw-btns"><button class="btn btn-ghost btn-sm" onclick="nomWriteDemo()">👀 看示范 <small>Xem mẫu</small></button><button class="btn btn-ghost btn-sm" onclick="nomWriteReset()">↺ 重写 <small>Viết lại</small></button><button class="btn btn-pink btn-sm" onclick="nomWriteDone()">✓ 完成 <small>Xong</small></button></div>';
-  document.getElementById('modalMask').classList.add('show');
-  const my={tid:tid,i:i,c:x[0],mode:'trace',writer:null,done:false,miss:0,ink:false};_nw=my;
-  setTimeout(()=>{if(_nw===my)nomWriteInit(my);},40);
+// 字卡：点大字在词条下面展开 / 收起。含这个字的词（NOM_WORDS_RAW）和俗语；「我的收集」自己写，存在 gw.nmNotes，会同步
+const _nomOpen=new Set();
+function nomInfo(tid,i){
+  const t=getTask(tid);if(!t)return;
+  if(_nomOpen.has(i))_nomOpen.delete(i);else _nomOpen.add(i);
+  nomDetailRefresh(t,i);
+  if(_nomOpen.has(i)&&!_nomDict)nomDictLoad().then(()=>nomDetailRefresh(t,i)).catch(()=>{});
 }
-function nomStageSize(){const st=document.getElementById('nwStage');return (st&&st.clientWidth)||Math.max(200,Math.min(296,(window.innerWidth||400)-60));}
-function nomWriteInit(my){
-  nomTraceSetup();
-  Promise.all([nomStrokeData(),nomLoadHW()]).then(([D])=>{
-    if(_nw!==my)return;
-    const d=D[my.c];if(!d)return;
-    const st=document.getElementById('nwStage');const S=nomStageSize();
-    my.comp=!!d.c;
-    my.writer=HanziWriter.create('nwHW',my.c,{width:S,height:S,padding:S*.06,showCharacter:false,showOutline:true,strokeColor:'#B0507E',outlineColor:'#EEDDE7',drawingColor:'#5B3E66',highlightColor:'#F7A8C8',drawingWidth:Math.round(S/14),showHintAfterMisses:2,
-      charDataLoader:(ch,onLoad)=>onLoad(d),
-      onLoadCharDataSuccess:()=>{if(_nw!==my)return;my.mode='stroke';st.classList.add('hw');nomStrokeQuiz();}});
-  }).catch(()=>{});
+function nomDetailRefresh(t,i){
+  const on=_nomOpen.has(i);
+  document.querySelectorAll('.nom-detail[data-i="'+i+'"]').forEach(el=>{el.innerHTML=on?nomDetail(t,i):'';el.classList.toggle('on',on);});
+  document.querySelectorAll('.nom-card[data-i="'+i+'"]').forEach(el=>el.classList.toggle('open',on));
 }
-function nomWriteClose(){_nw=null;document.getElementById('modalBox').classList.remove('modal-nom');closeModal();}
-function nomTip(s){const el=document.getElementById('nwTip');if(el)el.innerHTML=s;}
-function nomStrokeQuiz(){
-  const my=_nw;if(!my||!my.writer)return;my.done=false;my.miss=0;
-  nomTip(my.comp?'按笔顺一笔一笔写，写错两次会提示（自造喃字：字形是 Han-Nom Kai 楷体，笔顺按汉字规则排：先左后右、先上后下、先外后内）':'按笔顺一笔一笔写，写错两次会提示下一笔');
-  my.writer.quiz({onMistake:()=>{my.miss++;},onComplete:s=>{my.done=true;my.miss=s.totalMistakes;nomTip(s.totalMistakes?'写完啦！错了 '+s.totalMistakes+' 次，点「完成」记下来，或者「重写」再来一遍':'写完啦！一笔都没错 ✨ 点「完成」记下来');}});
+// 含这个字的词：词库里的词 + 自己的改动（gw.nmWords[字]={del:[「喃字|读音」], add:[[喃字,读音]]}，只记差别）
+function nomWordList(c,g){
+  const W=window.NOM_WORDS_RAW||{};const B=[];
+  for(const w in W)if(W[w].includes(c))B.push([W[w],w]);
+  B.sort((a,b)=>a[0].length-b[0].length||a[1].localeCompare(b[1]));
+  const ed=(g.nmWords&&g.nmWords[c])||{};const del=new Set(ed.del||[]);
+  const out=B.filter(([n,w])=>!del.has(n+'|'+w)).map(([n,w])=>({n:n,w:w}));
+  (ed.add||[]).forEach(([n,w])=>{if(!out.some(o=>o.n===n&&o.w===w))out.push({n:n,w:w,mine:1});});
+  return {list:out,base:B};
 }
-function nomTraceSetup(){
-  const st=document.getElementById('nwStage');if(!st||!_nw)return;
-  const S=nomStageSize(),dpr=window.devicePixelRatio||1;
-  ['nwGhost','nwCv'].forEach(id=>{const c=document.getElementById(id);c.width=S*dpr;c.height=S*dpr;c.style.width=c.style.height=S+'px';c.getContext('2d').setTransform(dpr,0,0,dpr,0,0);});
-  const my=_nw;
-  const draw=()=>{if(_nw!==my)return;const ctx=document.getElementById('nwGhost').getContext('2d');ctx.clearRect(0,0,S,S);ctx.fillStyle='#F3D9E6';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=Math.round(S*.8)+'px '+NOM_KAI;ctx.fillText(my.c,S/2,S*.53);};
-  nomFontsReady(my.c,true).then(draw,draw);
-  nomTip('照着淡色的字描红（这个字还没有笔顺数据），写好点「完成」打分');
-  const cv=document.getElementById('nwCv');const ctx=cv.getContext('2d');
-  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#5B3E66';ctx.lineWidth=Math.max(8,S/18);
-  let down=false,lx=0,ly=0;
-  const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
-  cv.onpointerdown=e=>{if(_nw.mode!=='trace')return;down=true;cv.setPointerCapture(e.pointerId);[lx,ly]=pos(e);ctx.beginPath();ctx.arc(lx,ly,ctx.lineWidth/2,0,Math.PI*2);ctx.fillStyle='#5B3E66';ctx.fill();_nw.ink=true;};
-  cv.onpointermove=e=>{if(!down)return;const [x,y]=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();lx=x;ly=y;};
-  cv.onpointerup=cv.onpointercancel=()=>{down=false;};
+function nomWordsSave(g,c,final){
+  const {base}=nomWordList(c,{});
+  const fk=new Set(final.map(([n,w])=>n+'|'+w));const bk=new Set(base.map(([n,w])=>n+'|'+w));
+  const del=base.filter(([n,w])=>!fk.has(n+'|'+w)).map(([n,w])=>n+'|'+w);
+  const add=final.filter(([n,w])=>!bk.has(n+'|'+w));
+  g.nmWords=g.nmWords||{};
+  if(del.length||add.length)g.nmWords[c]={del:del,add:add};else delete g.nmWords[c];
+  save();
 }
+const _nomEdit=new Set(),_nomNoteOpen=new Set();
+function nomDetail(t,i){
+  const x=NOM_CHARS[i];const c=x[0];const g=gwState(t);const my=(g.nmNotes&&g.nmNotes[c])||'';
+  const tid=t.id;const ed=_nomEdit.has(i);
+  let h='<div class="nd-label">含这个字的词语'+(_nomDict&&!ed?'<a class="nd-act" href="javascript:void 0" onclick="nomWordsEdit(\''+tid+'\','+i+',1)">✎ 编辑</a>':'')+'</div>';
+  if(!_nomDict)h+='<div class="muted nd-empty">词库加载中…</div>';
+  else{
+    const {list}=nomWordList(c,g);
+    if(ed){
+      h+='<div class="nd-edit" id="ndEdit'+i+'">'+list.map(o=>nomEditRow(o.n,o.w)).join('')+nomEditRow('','')+'</div>'
+        +'<div class="nd-edit-btns"><a href="javascript:void 0" onclick="document.getElementById(\'ndEdit'+i+'\').insertAdjacentHTML(\'beforeend\',nomEditRow(\'\',\'\'))">＋ 加一行</a><span style="flex:1"></span><button class="btn btn-ghost btn-sm" onclick="nomWordsEdit(\''+tid+'\','+i+',0)">取消</button><button class="btn btn-pink btn-sm" onclick="nomWordsDone(\''+tid+'\','+i+')">完成</button></div>';
+    }else{
+      const all=x._ndAll;const show=all?list:list.slice(0,24);
+      h+=list.length?'<div class="nd-words">'+show.map(o=>'<span class="nd-w'+(o.mine?' mine':'')+'"><b class="nom-k">'+esc(o.n)+'</b> '+esc(o.w)+'</span>').join('<span class="nd-sep">·</span>')+(list.length>24&&!all?'<span class="nd-sep">·</span><a class="nd-more" href="javascript:void 0" onclick="NOM_CHARS['+i+']._ndAll=1;nomDetailRefresh(getTask(\''+tid+'\'),'+i+')">展开全部 '+list.length+' 个</a>':'')+'</div>':'<div class="muted nd-empty">还没有词语，点「✎ 编辑」可以自己加</div>';
+    }
+    const say=NOM_SAYINGS.filter(s=>s[0].includes(c));
+    if(say.length)h+='<div class="nd-label">俗语</div>'+say.map(s=>'<div class="nd-say"><b class="nom-k">'+esc(s[0])+'</b> '+esc(s[1])+'<span class="muted">　'+esc(s[2])+'</span></div>').join('');
+  }
+  const lines=my.split('\n').filter(s=>s.trim()).length;
+  h+='<details class="nd-note"'+(_nomNoteOpen.has(i)?' open':'')+' ontoggle="nomNoteToggle('+i+',this.open)"><summary>我的收集'+(lines?'<span class="muted">（'+lines+' 行）</span>':'')+'</summary>'
+    +'<textarea class="nd-my nom-f" data-c="'+esc(c)+'" placeholder="自己收集的词、句子、笔记都可以写在这里，会自动保存。一行写「喃字 读音」（如：𠊛越 người việt），点下面的按钮就能收进上面的词语" oninput="nomNoteSave(\''+tid+'\',\''+c+'\',this.value)">'+esc(my)+'</textarea>'
+    +'<div class="nd-edit-btns"><span class="muted" style="font-size:12px">一行一个「喃字 读音」</span><span style="flex:1"></span><button class="btn btn-ghost btn-sm" onclick="nomNoteToWords(\''+tid+'\','+i+')">⤴ 收进词语</button></div></details>';
+  return h;
+}
+function nomEditRow(n,w){return '<div class="nd-row"><input class="nd-in-n nom-f" placeholder="喃字" value="'+esc(n)+'"><input class="nd-in-w" placeholder="读音" value="'+esc(w)+'"><button class="nd-x" title="删掉这个词" onclick="this.parentNode.remove()">×</button></div>';}
+function nomWordsEdit(tid,i,on){const t=getTask(tid);if(!t)return;if(on)_nomEdit.add(i);else _nomEdit.delete(i);nomDetailRefresh(t,i);}
+function nomWordsDone(tid,i){
+  const t=getTask(tid);if(!t)return;const g=gwState(t);const c=NOM_CHARS[i][0];
+  const box=document.getElementById('ndEdit'+i);if(!box)return;
+  const final=[];
+  box.querySelectorAll('.nd-row').forEach(r=>{const n=r.querySelector('.nd-in-n').value.trim(),w=r.querySelector('.nd-in-w').value.trim().toLowerCase();if(n&&!final.some(f=>f[0]===n&&f[1]===w))final.push([n,w]);});
+  nomWordsSave(g,c,final);_nomEdit.delete(i);nomDetailRefresh(t,i);toast('词语已保存 ✓');
+}
+function nomNoteToggle(i,open){if(open)_nomNoteOpen.add(i);else _nomNoteOpen.delete(i);}
+function nomNoteToWords(tid,i){
+  const t=getTask(tid);if(!t)return;const g=gwState(t);const c=NOM_CHARS[i][0];
+  const el=document.querySelector('.nd-my[data-c="'+c+'"]');const txt=el?el.value:'';
+  const {list}=nomWordList(c,g);const final=list.map(o=>[o.n,o.w]);let n=0;
+  txt.split('\n').forEach(line=>{
+    const m=line.trim().match(/^([\u2E80-\u9FFF\uF900-\uFAFF\u{20000}-\u{323AF}]+)[\s:：，,]+(.+)$/u);
+    if(!m)return;const w=m[2].trim().toLowerCase();
+    if(!final.some(f=>f[0]===m[1]&&f[1]===w)){final.push([m[1],w]);n++;}
+  });
+  if(!n){toast('没找到可以收的词：一行写「喃字 读音」');return;}
+  nomWordsSave(g,c,final);nomDetailRefresh(t,i);toast('收进 '+n+' 个词 ✓');
+}
+function nomNoteSave(tid,c,v){
+  const t=getTask(tid);if(!t)return;const g=gwState(t);g.nmNotes=g.nmNotes||{};
+  if(v.trim())g.nmNotes[c]=v;else delete g.nmNotes[c];
+  document.querySelectorAll('.nd-my[data-c="'+c+'"]').forEach(el=>{if(el!==document.activeElement)el.value=v;});
+  document.querySelectorAll('.nom-card[data-c="'+c+'"] .nom-mark').forEach(el=>el.style.display=v.trim()?'':'none');
+  clearTimeout(nomNoteSave._s);nomNoteSave._s=setTimeout(save,600);
+}
+// 喃字俗语（字形取自 Wiktionary，CC BY-SA；中文意思自己写）
+const NOM_SAYINGS=[["笿𥎁𢯜𬘋","lạt mềm buộc chặt","软绳子反而绑得紧——以柔克刚，好好说比硬来管用"],["𫧇𪰇𬘋𪝌","năng nhặt chặt bị","勤捡就能装满袋——积少成多"],["蜜𠮾折𧋆","mật ngọt chết ruồi","甜蜜毒死苍蝇——甜言蜜语最害人"],["几撘𧜖葻几汵㳥","kẻ đắp chăn bông kẻ lạnh lùng","有人盖着棉被，有人冻得发抖——苦乐不均"],["边𡗶𧣳𣷭","bên trời góc bể","天边海角——形容极远的地方"],["咹磊於寺","ăn xổi ở thì","吃现成、住一时——只顾眼前，得过且过"],["幔𡗶𥴜𡐙","màn trời chiếu đất","以天为帐、以地为席——流离失所，无家可归"],["𡑰空茹𥨨","vườn không nhà trống","园子空了、房子空了——坚壁清野"],["𤕔傳𡥵𦀼","cha truyền con nối","父亲传、儿子接——父子相承，世代相传"],["假唫假𤷭","giả câm giả điếc","装哑又装聋——装聋作哑"],["𬏩𪲝𬏩𥴜","liệt giường liệt chiếu","瘫在床上、瘫在席上——卧床不起"],["哭淥𧢟𪘵","khóc lóc nghiến răng","哭哭啼啼、咬牙切齿"],["共吒恪媄","cùng cha khác mẹ","同父异母"],["口佛心蛇","khẩu Phật tâm xà","嘴上是佛，心里是蛇——口蜜腹剑"],["銘心刻骨","minh tâm khắc cốt","刻骨铭心"],["深山窮谷","thâm sơn cùng cốc","深山穷谷——偏僻荒远的地方"],["山餚海味","sơn hào hải vị","山珍海味"],["男清女秀","nam thanh nữ tú","男的清俊，女的秀丽——俊男美女"],["碎羅𠊛越","tôi là người Việt","我是越南人"],["丐呢羅咦","cái này là gì","这是什么？"],["祝𢜠𢆥㵋","chúc mừng năm mới","新年快乐"],["恭祝新春","cung chúc tân xuân","恭贺新春"],["祝𢜠生日","chúc mừng sinh nhật","生日快乐"],["降生𢝙𡲈","Giáng sinh vui vẻ","圣诞快乐"]];
 // 字体按需加载：常用的 823 个字（和它们的部件）在小字体里，其余的字才去拿扩展字体
 let _nomBase=null;
 function nomBaseSet(){
@@ -5583,43 +5632,6 @@ function nomFontsReady(text,kai){
   return Promise.all(fams.map(f=>document.fonts.load('40px '+f,text).catch(()=>{})));
 }
 
-function nomWriteDemo(){
-  const my=_nw;if(!my)return;
-  if(my.mode==='stroke'&&my.writer){my.writer.cancelQuiz();my.writer.animateCharacter({onComplete:()=>{if(_nw!==my)return;setTimeout(()=>{my.writer.hideCharacter();nomStrokeQuiz();},500);}});nomTip('看笔顺示范…看完会自动回到练写');return;}
-  const g=document.getElementById('nwGhost');if(!g)return;g.classList.add('demo');setTimeout(()=>g.classList.remove('demo'),1400);
-}
-function nomWriteReset(){
-  const my=_nw;if(!my)return;
-  if(my.mode==='stroke'&&my.writer){my.writer.cancelQuiz();nomStrokeQuiz();return;}
-  const cv=document.getElementById('nwCv');const c2=cv.getContext('2d');c2.save();c2.setTransform(1,0,0,1,0,0);c2.clearRect(0,0,cv.width,cv.height);c2.restore();my.ink=false;my.logged=false;
-}
-// 描红打分：把字形和笔迹都缩到 64×64 的格子里比较，看描到了多少、写出界多少
-function nomTraceScore(){
-  const N=64,D=2,a=document.getElementById('nwGhost'),b=document.getElementById('nwCv');
-  const grid=c=>{const o=document.createElement('canvas');o.width=o.height=N;const x=o.getContext('2d');x.drawImage(c,0,0,N,N);const d=x.getImageData(0,0,N,N).data;const m=new Uint8Array(N*N);for(let k=0;k<N*N;k++)m[k]=d[k*4+3]>40?1:0;return m;};
-  const dil=m=>{const o=new Uint8Array(N*N);for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(!m[y*N+x])continue;for(let dy=-D;dy<=D;dy++)for(let dx=-D;dx<=D;dx++){const yy=y+dy,xx=x+dx;if(yy>=0&&yy<N&&xx>=0&&xx<N)o[yy*N+xx]=1;}}return o;};
-  const G=grid(a),U=grid(b),Gd=dil(G),Ud=dil(U);
-  let g=0,gc=0,u=0,ui=0;for(let k=0;k<N*N;k++){if(G[k]){g++;if(Ud[k])gc++;}if(U[k]){u++;if(Gd[k])ui++;}}
-  if(!g||!u)return 0;
-  return Math.round(100*Math.pow((gc/g)*(ui/u),1.3));
-}
-function nomWriteDone(){
-  const my=_nw;if(!my)return;const t=getTask(my.tid);const x=NOM_CHARS[my.i];
-  let res;
-  if(my.mode==='stroke'){
-    if(!my.done){nomTip('还没写完哦～写完最后一笔再点「完成」');return;}
-    res='按笔顺写'+(my.miss?'，错 '+my.miss+' 次':'，全对');
-  }else{
-    if(!my.ink){nomTip('先照着淡色字描一遍吧');return;}
-    if(my.logged){nomTip('这一遍已经记过啦，点「重写」可以再描一遍');return;}
-    my.logged=true;
-    const sc=nomTraceScore();
-    res='描红 '+sc+' 分';
-    nomTip((sc>=80?'写得很像 ✨ ':sc>=60?'不错哦 👍 ':'有些笔画没描到，可以「重写」再描一遍 · ')+sc+' 分，已记进笔记');
-  }
-  if(t){gwLog(t,'🖌️ 喃字练写：'+x[0]+' '+x[1].split('/')[0]+'（'+res+'）');save();renderSidebar();}
-  if(my.mode==='stroke'){nomWriteClose();renderDetail();toast('练写 '+x[0]+' ✓ 已记进笔记');}
-}
 /* 越南语输入：支持直接打带声调的国语字，也支持 Telex（cuar → của，nguoiwf → người，ddi → đi） */
 const VI_TONE={'́':1,'̀':2,'̉':3,'̃':4,'̣':5};
 function viKey(s){
@@ -5907,7 +5919,7 @@ function nomImeKey(e,tid){
 const NS_OR='#E8833A',NS_LT='#F6C2A0',NS_GRID='#F0A877',NS_GRAY='#8A8A8A';
 let _ns=null;
 function nomSheetOpen(o){
-  _ns=Object.assign({tool:'pen',penOnly:false,rows:1,tpl:'char',setIdx:0},o);
+  _ns=Object.assign({tool:'pen',penOnly:false,rows:1,tpl:'char',setIdx:0,cell:18.6,fs:80,say:Math.floor(Math.random()*NOM_SAYINGS.length)},o);
   let el=document.getElementById('nomSheet');
   if(!el){el=document.createElement('div');el.id='nomSheet';document.body.appendChild(el);}
   el.className='show';document.body.classList.add('ns-open');
@@ -5922,6 +5934,9 @@ function nomSheetBar(){
   if(sets.length>1)h+='<select class="gw-sel" onchange="_ns.setIdx=+this.value;nomSheetBar();nomSheetRender()">'+sets.map((s,i)=>'<option value="'+i+'"'+(i===ns.setIdx?' selected':'')+'>'+esc(s[0])+'（'+s[1].length+' 字）</option>').join('')+'</select>';
   if(sets[ns.setIdx]&&sets[ns.setIdx][2])h+='<input class="ns-own nom-f" placeholder="粘贴或打出想练的字" value="'+esc(ns.own||'')+'" onchange="_ns.own=this.value;nomSheetRender()">';
   if(ns.tpl==='char')h+='<select class="gw-sel" onchange="_ns.rows=+this.value;nomSheetRender()"><option value="1"'+(ns.rows===1?' selected':'')+'>每字 1 行</option><option value="2"'+(ns.rows===2?' selected':'')+'>每字 2 行</option></select>';
+  h+='<select class="gw-sel" title="格子大小" onchange="_ns.cell=+this.value;nomSheetRender()">'+[[14,'小格子'],[16.5,'中小格子'],[18.6,'中格子'],[23,'大格子'],[30,'特大格子']].map(o=>'<option value="'+o[0]+'"'+(o[0]===ns.cell?' selected':'')+'>'+o[1]+'</option>').join('')+'</select>';
+  h+='<select class="gw-sel" title="字的大小（占格子的比例）" onchange="_ns.fs=+this.value;nomSheetRender()">'+[60,70,80,90].map(v=>'<option value="'+v+'"'+(v===ns.fs?' selected':'')+'>字号 '+v+'%</option>').join('')+'</select>';
+  if(ns.tpl==='char')h+='<button class="btn btn-ghost btn-sm" onclick="_ns.say=(_ns.say+1+Math.floor(Math.random()*(NOM_SAYINGS.length-1)))%NOM_SAYINGS.length;nomSheetRender()" title="换一句页眉的喃字俗语">🎲 换一句</button>';
   h+='<span class="ns-sp"></span>';
   h+='<span class="ns-tools"><button class="ns-tb'+(ns.tool==='pen'?' on':'')+'" onclick="nomSheetTool(\'pen\')" title="笔">✏️</button><button class="ns-tb'+(ns.tool==='eraser'?' on':'')+'" onclick="nomSheetTool(\'eraser\')" title="橡皮">🧽</button><button class="ns-tb" onclick="nomSheetClearInk()" title="清空笔迹">🗑️</button><label class="nom-chk" title="打开后只有触控笔能写，手指可以滑动翻页"><input type="checkbox"'+(ns.penOnly?' checked':'')+' onchange="_ns.penOnly=this.checked;nomSheetTouch()"> 只认触控笔</label></span>';
   h+='<button class="btn btn-pink btn-sm" onclick="nomSheetPdf(this)">⬇️ 导出 PDF</button><button class="nw-x" onclick="nomSheetClose()" title="关闭">×</button></div>';
@@ -5964,11 +5979,11 @@ function viCompose(b,t){
 function nomSheetPlan(){
   const ns=_ns;
   if(ns.tpl==='char'){
-    const cs=nomSheetChars();const per=ns.rows===2?6:10;const pages=[];
+    const cs=nomSheetChars();const cell=ns.cell||18.6;const per=Math.max(1,Math.floor((287-18)/(6.6+(ns.rows||1)*cell)));const pages=[];
     for(let i=0;i<cs.length;i+=per)pages.push({tpl:'char',items:cs.slice(i,i+per).map(c=>({c:c,rd:nomReadingOf(c)}))});
     return pages.length?pages:[{tpl:'char',items:[]}];
   }
-  const COLS=9,ROWS=12;const toks=[];
+  const {COLS,ROWS}=nsTextGrid();const toks=[];
   String(nomSheetText()).replace(/\r/g,'').replace(/\n|[A-Za-zÀ-ỹĐđ]+|\S/gu,m=>{toks.push(m);return m;});
   const cols=[];let col=[];
   toks.forEach(tk=>{
@@ -5979,6 +5994,7 @@ function nomSheetPlan(){
   const pages=[];for(let i=0;i<cols.length;i+=COLS)pages.push({tpl:'text',cols:cols.slice(i,i+COLS)});
   return pages.length?pages:[{tpl:'text',cols:[]}];
 }
+function nsTextGrid(){const c=(_ns&&_ns.cell)||18.6;const cw=c*1.09;return {COLS:Math.max(3,Math.floor(182/cw)),ROWS:Math.max(4,Math.floor(268/(c*1.2)))};}
 function nsStrokeSeq(ctx,k,d,x,y,s,maxW){
   const n=d.strokes.length;let sz=Math.min(s,(maxW/n)-0.5);if(sz<2.2)sz=2.2;
   const shown=Math.min(n,Math.floor(maxW/(sz+0.5)));
@@ -6004,11 +6020,14 @@ function nsGlyph(ctx,k,c,cx,cy,size,color){
 function nomSheetDraw(ctx,k,p,D){
   ctx.fillStyle='#fff';ctx.fillRect(0,0,210*k,297*k);
   if(p.tpl==='char'){
-    const X0=12,X1=198,Y0=18,CELL=(X1-X0)/10,INFO=6.6,rows=_ns.rows||1,BH=INFO+rows*CELL;
-    ctx.fillStyle=NS_OR;ctx.font=(3.6*k)+'px sans-serif';ctx.textBaseline='alphabetic';ctx.textAlign='left';
-    ctx.fillText('姓名：',(X0+1)*k,13*k);
-    ctx.strokeStyle=NS_OR;ctx.lineWidth=0.25*k;ctx.beginPath();ctx.moveTo((X0+12)*k,13.6*k);ctx.lineTo((X0+52)*k,13.6*k);ctx.stroke();
-    ctx.textAlign='right';ctx.fillText('年　　　月　　　日',X1*k,13*k);
+    const X0=12,X1=198,Y0=18,NC=Math.max(4,Math.floor((X1-X0)/(_ns.cell||18.6))),CELL=(X1-X0)/NC,INFO=6.6,rows=_ns.rows||1,BH=INFO+rows*CELL,FS=(_ns.fs||80)/100;
+    ctx.fillStyle=NS_OR;ctx.font=(3.6*k)+'px sans-serif';ctx.textBaseline='alphabetic';ctx.textAlign='right';
+    const dateTxt='年　　　月　　　日';ctx.fillText(dateTxt,X1*k,13*k);const dw=ctx.measureText(dateTxt).width/k;
+    // 页眉：随机一句喃字俗语
+    const sy=NOM_SAYINGS[_ns.say%NOM_SAYINGS.length];
+    if(sy){ctx.textAlign='left';ctx.fillStyle='#3E2E44';ctx.font=(5.2*k)+'px '+NOM_KAI;ctx.fillText(sy[0],(X0+1)*k,13.4*k);let x2=X0+1+ctx.measureText(sy[0]).width/k+2.5;
+      ctx.fillStyle=NS_OR;ctx.font=(3.1*k)+'px sans-serif';ctx.fillText(sy[1],x2*k,13*k);x2+=ctx.measureText(sy[1]).width/k+2;
+      ctx.fillStyle='#8A7A86';let zh=sy[2];const room=X1-dw-4-x2;ctx.font=(2.7*k)+'px sans-serif';while(zh.length>2&&ctx.measureText(zh).width/k>room)zh=zh.slice(0,-2)+'…';if(room>8)ctx.fillText(zh,x2*k,13*k);}
     ctx.lineWidth=0.7*k;ctx.strokeStyle=NS_OR;ctx.strokeRect(X0*k,Y0*k,(X1-X0)*k,(287-Y0)*k);
     p.items.forEach((it,i)=>{
       const y=Y0+i*BH;
@@ -6023,26 +6042,26 @@ function nomSheetDraw(ctx,k,p,D){
         const sx=X0+1.5+lw+3;const used=nsStrokeSeq(ctx,k,d,sx,y+5.4,4.6,X1-2-tw-2-sx);
         ctx.fillStyle='#444';ctx.textAlign='left';ctx.font=(3*k)+'px sans-serif';ctx.fillText(tail,(sx+used+1.5)*k,(y+4.9)*k);
       }
-      for(let r=0;r<rows;r++)for(let j=0;j<10;j++){
+      for(let r=0;r<rows;r++)for(let j=0;j<NC;j++){
         const cx=X0+j*CELL,cy=y+INFO+r*CELL;
         nsCellGrid(ctx,k,cx,cy,CELL,CELL,true);
         let col=null;
         if(r===0&&j===0)col='#2F2A2A';
         else if(r===0&&(j===1||j===3||j===5))col=NS_LT;
         else if(r===1&&(j===0||j===2||j===4))col=NS_LT;
-        if(col)nsGlyph(ctx,k,it.c,cx+CELL/2,cy+CELL*0.53,CELL*0.8,col);
+        if(col)nsGlyph(ctx,k,it.c,cx+CELL/2,cy+CELL*0.53,CELL*FS,col);
       }
     });
     return;
   }
   // 描红字帖：竖排，右起
-  const X0=14,X1=196,Y0=16,Y1=284,COLS=9,ROWS=12,CW=(X1-X0)/COLS,RH=(Y1-Y0)/ROWS;
+  const X0=14,X1=196,Y0=16,Y1=284,{COLS,ROWS}=nsTextGrid(),CW=(X1-X0)/COLS,RH=(Y1-Y0)/ROWS;
   ctx.strokeStyle=NS_GRAY;ctx.lineWidth=0.9*k;ctx.strokeRect((X0-2.2)*k,(Y0-2.2)*k,(X1-X0+4.4)*k,(Y1-Y0+4.4)*k);
   ctx.lineWidth=0.3*k;ctx.strokeRect(X0*k,Y0*k,(X1-X0)*k,(Y1-Y0)*k);
   ctx.strokeStyle='#A9A9A9';ctx.lineWidth=0.25*k;ctx.beginPath();
   for(let c=1;c<COLS;c++){ctx.moveTo((X0+c*CW)*k,Y0*k);ctx.lineTo((X0+c*CW)*k,Y1*k);}
   ctx.stroke();
-  const sz=Math.min(CW,RH)*0.78;
+  const sz=Math.min(CW,RH)*((_ns.fs||80)/100);
   p.cols.forEach((col,ci)=>col.forEach((tk,ri)=>{
     const cx=X1-(ci+0.5)*CW,cy=Y0+(ri+0.53)*RH;
     if(/^[A-Za-zÀ-ỹĐđ]+$/u.test(tk)){ctx.fillStyle=NS_LT;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=(Math.min(4.2,CW*1.6/Math.max(tk.length,3))*k)+'px sans-serif';ctx.fillText(tk,cx*k,cy*k);return;}
@@ -6056,7 +6075,7 @@ async function nomSheetRender(){
   let D={};
   try{if(ns.tpl==='char')D=await nomStrokeData();}catch(e){}
   if(ns.tpl==='char'&&!_nomDict&&nomSheetChars().some(c=>nomCharIdx(c)==null))try{await nomDictLoad();}catch(e){}
-  await nomFontsReady(ns.tpl==='char'?nomSheetChars().join(''):nomSheetText(),true);
+  await nomFontsReady((ns.tpl==='char'?nomSheetChars().join(''):nomSheetText())+(NOM_SAYINGS[ns.say%NOM_SAYINGS.length]||[''])[0],true);
   if(_ns!==ns||ns.gen!==my)return;
   const pages=nomSheetPlan();ns.pages=pages;ns.D=D;
   const W=Math.min(Math.max(280,(wrap.clientWidth||Math.min(800,(window.innerWidth||800)-24))-8),820),H=W*297/210,k=W/210,dpr=Math.min(2.5,window.devicePixelRatio||1);
@@ -7936,7 +7955,7 @@ function pickClassDate(cid){
 }
 function showPrompt(title,val,cb){const mask=document.getElementById('modalMask');const box=document.getElementById('modalBox');box.innerHTML='<h3>'+esc(title)+'</h3><input id="promptInp" value="'+esc(val)+'"><div class="m-actions"><button class="btn btn-ghost btn-sm" onclick="closeModal()">取消</button><button class="btn btn-pink btn-sm" id="promptOk">确定</button></div>';mask.classList.add('show');const inp=document.getElementById('promptInp');setTimeout(()=>inp.focus(),50);inp.onkeydown=e=>{if(e.key==='Enter'){const v=inp.value.trim();closeModal();cb(v);}};document.getElementById('promptOk').onclick=()=>{const v=inp.value.trim();closeModal();cb(v);};}
 function showConfirm(title,body,cb,okText){const mask=document.getElementById('modalMask');const box=document.getElementById('modalBox');box.innerHTML='<h3>'+esc(title)+'</h3><div class="m-body">'+esc(body)+'</div><div class="m-actions"><button class="btn btn-ghost btn-sm" onclick="closeModal()">取消</button><button class="btn btn-pink btn-sm" id="confirmOk">'+esc(okText||'确定删除')+'</button></div>';mask.classList.add('show');document.getElementById('confirmOk').onclick=()=>{closeModal();cb();};}
-function closeModal(){document.getElementById('modalMask').classList.remove('show');const b=document.getElementById('modalBox');if(b.classList.contains('modal-nom')){b.classList.remove('modal-nom');_nw=null;}}
+function closeModal(){document.getElementById('modalMask').classList.remove('show');const b=document.getElementById('modalBox');if(b.classList.contains('modal-nom'))b.classList.remove('modal-nom');}
 document.getElementById('modalMask').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 function toggleSidebar(open){const sb=document.getElementById('sidebar');const bd=document.getElementById('backdrop');if(open){sb.classList.add('open');bd.classList.add('show');}else{sb.classList.remove('open');bd.classList.remove('show');}}
 function bindDiaryButtons(){
