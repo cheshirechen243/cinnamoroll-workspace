@@ -4,7 +4,8 @@
  * - Firebase 脚本(gstatic)：缓存后可离线启动
  * - Firestore 等其它跨域请求：不拦截，直接走网络
  */
-const CACHE = 'cinnamoroll-v41';
+const CACHE = 'cinnamoroll-v46';
+const ASSETS = 'cinnamoroll-assets-v1'; // fonts/、lib/ 里的大文件：网址带版本号，内容变了就改 ?v=
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -16,7 +17,7 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
     const keys = await caches.keys();
-    const old = keys.filter((k) => k !== CACHE);
+    const old = keys.filter((k) => k !== CACHE && k !== ASSETS);
     await Promise.all(old.map((k) => caches.delete(k)));
     await self.clients.claim();
     if (old.length) {
@@ -49,6 +50,20 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  // 2a) 字体、词库、笔顺数据、库文件：缓存优先（很大，而且不常变）
+  if (url.origin === self.location.origin && /\/(fonts|lib)\//.test(url.pathname)) {
+    e.respondWith((async () => {
+      const c = await caches.open(ASSETS);
+      const hit = await c.match(req);
+      if (hit) return hit;
+      try {
+        const net = await fetch(req);
+        if (net && net.ok) c.put(req, net.clone());
+        return net;
+      } catch (err) { return Response.error(); }
+    })());
+    return;
+  }
   // 2) 本站静态资源：先缓存，后台更新
   if (url.origin === self.location.origin) {
     if (url.pathname.indexOf('/api/') !== -1) return;
