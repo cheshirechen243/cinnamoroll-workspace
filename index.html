@@ -569,6 +569,8 @@ button.pm-thumb.on{border-color:var(--pink-deep);box-shadow:0 0 0 2px rgba(255,2
 @font-face{font-family:"NomKai";src:local("Han-Nom Kai"),url("fonts/nom-kai.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"NomKaiExt";src:local("Han-Nom Kai"),url("fonts/nom-kai-ext.woff2?v=2") format("woff2");font-display:swap}
 .nom-f{font-family:"NomSub","NomExt","Nom Na Tong","NomKaiExt","Noto Serif SC","Songti SC",serif}
+.nom-pk{font-weight:700;min-width:34px}.nom-pk.on{background:var(--pink-deep);color:#fff;border-color:var(--pink-deep)}
+.nom-sq-head{font-size:12px;margin:8px 0 6px}.nom-sq-list{margin-top:6px}.nom-card-x{border-left-color:#D9CCF5}
 .nom-search{margin:4px 0 8px}
 .nom-sq{width:100%;box-sizing:border-box;font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-family:inherit}
 .nom-sq-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:300px;overflow-y:auto}
@@ -5433,12 +5435,12 @@ function nomLearnView(t,g){
 }
 function nomCard(t,x,i){
   const rd=x[1].split('/');
-  return '<div class="nom-card"><button class="nom-big nom-k" onclick="nomWrite(\''+t.id+'\','+i+')" title="点一下练写">'+esc(x[0])+'</button><div class="nom-info"><div class="nom-rd">'+rd.map((r,k)=>k?'<span class="nom-rd2">'+esc(r)+'</span>':'<b>'+esc(r)+'</b>').join(' ')+' <span class="tag '+(x[5]?'tag-pink':'tag-blue')+'">'+(x[5]?'自造喃字':'借用汉字')+'</span></div><div class="nom-m">'+esc(x[2])+'</div>'+(x[3]&&nomIds(x[3])?'<div class="nom-ids">'+nomIds(x[3])+'</div>':'')+'</div><div class="nom-ops"><button class="btn btn-ghost btn-sm" onclick="nomWrite(\''+t.id+'\','+i+')" title="练写">🖌️</button><button class="btn btn-ghost btn-sm" onclick="nomSpeak(\''+esc(rd[0])+'\')" title="读音（需要设备有越南语语音）">🔊</button></div></div>';
+  return '<div class="nom-card"><button class="nom-big nom-k" onclick="nomWrite(\''+t.id+'\','+i+')" title="点一下练写">'+esc(x[0])+'</button><div class="nom-info"><div class="nom-rd">'+rd.map((r,k)=>k?'<span class="nom-rd2">'+esc(r)+'</span>':'<b>'+esc(r)+'</b>').join(' ')+' <span class="tag '+(x[5]?'tag-pink':'tag-blue')+'">'+(x[5]?'自造喃字':'借用汉字')+'</span></div><div class="nom-m">'+esc(x[2])+'</div>'+(x[3]&&nomIds(x[3])?'<div class="nom-ids">'+nomIds(x[3])+'</div>':'')+'</div><div class="nom-ops"><button class="btn btn-ghost btn-sm" onclick="nomWrite(\''+t.id+'\','+i+')" title="练写">🖌️</button>'+nomPkBtn(t,x[0],'')+'</div></div>';
 }
 /* 学字页：搜字（读音 / 喃字 / 中文意思）＋「我选的字」，选好的字可以直接生成字帖（gw.nmPick，会同步） */
 function nomPickBar(t,g){
   const p=g.nmPick||[];
-  if(!p.length)return '<div class="nom-pick muted" id="nomPickBar">搜到的字点 ＋ 就能放进「我选的字」，攒够了一起生成字帖</div>';
+  if(!p.length)return '<div class="nom-pick muted" id="nomPickBar">词条右边的 ＋ 可以把字放进「我选的字」，攒够了一起生成字帖</div>';
   return '<div class="nom-pick" id="nomPickBar"><span class="nom-pick-l">我选的字（'+p.length+'）</span>'+p.map(c=>'<span class="nom-pick-c"><b class="nom-k">'+esc(c)+'</b><button onclick="nomPickToggle(\''+t.id+'\',\''+c+'\')" title="去掉">×</button></span>').join('')+'<span style="flex:1"></span><button class="btn btn-ghost btn-sm" onclick="nomPickClear(\''+t.id+'\')">清空</button><button class="btn btn-pink btn-sm" onclick="nomSheetFromLearn(\''+t.id+'\',true)">📄 用这些字生成字帖</button></div>';
 }
 function nomSearchBox(t,g){
@@ -5464,18 +5466,22 @@ function nomSearchHits(q){
   }
   return {main:main,more:more,rd:k.t?viCompose(k.b,k.t):''};
 }
+function nomPkBtn(t,c,rd){
+  const on=((gwState(t).nmPick)||[]).includes(c);
+  return '<button class="btn btn-ghost btn-sm nom-pk'+(on?' on':'')+'" data-pk="'+esc(c)+'" onclick="nomPickToggle(\''+t.id+'\',\''+c+'\',\''+esc(rd||'')+'\')" title="放进 / 去掉「我选的字」（用来生成字帖）">'+(on?'✓':'＋')+'</button>';
+}
 function nomSearchRes(t,g){
   const q=(g.nmSq||'').trim();if(!q)return '';
   if(!_nomDict){nomDictLoad().then(()=>{const el=document.getElementById('nomSqRes');if(el)el.innerHTML=nomSearchRes(t,gwState(t));}).catch(()=>{});}
-  const {main,more,rd}=nomSearchHits(q);const pick=g.nmPick||[];
+  const {main,more,rd}=nomSearchHits(q);
   if(!main.length&&!more.length)return '<div class="muted nom-sq-none">没找到「'+esc(q)+'」</div>';
-  let h='<div class="nom-sq-grid">'+main.slice(0,60).map(i=>{const x=NOM_CHARS[i];const on=pick.includes(x[0]);
-    return '<div class="nom-sq-it"><button class="nom-sq-c nom-k" onclick="nomWrite(\''+t.id+'\','+i+')" title="练写">'+esc(x[0])+'</button><div class="nom-sq-r">'+esc(x[1].split('/')[0])+'</div><div class="nom-sq-m">'+esc(x[2].split('（')[0].split('｜')[0].slice(0,8))+'</div><button class="nom-sq-add'+(on?' on':'')+'" onclick="nomPickToggle(\''+t.id+'\',\''+x[0]+'\')" title="'+(on?'从「我选的字」去掉':'放进「我选的字」')+'">'+(on?'✓':'＋')+'</button></div>';}).join('')+'</div>';
-  if(more.length)h+='<div class="muted nom-sq-more">词库里的其他字（不在 823 个学字表里，可以放进字帖）：</div><div class="nom-sq-grid">'+more.map(c=>{const on=pick.includes(c);return '<div class="nom-sq-it"><span class="nom-sq-c nom-k">'+esc(c)+'</span><div class="nom-sq-r">'+esc(nomPickRd(g,c)||rd||nomReadingOf(c))+'</div><button class="nom-sq-add'+(on?' on':'')+'" onclick="nomPickToggle(\''+t.id+'\',\''+c+'\',\''+esc(rd)+'\')">'+(on?'✓':'＋')+'</button></div>';}).join('')+'</div>';
-  return h;
+  let h='<div class="nom-sq-list">'+main.slice(0,30).map(i=>nomCard(t,NOM_CHARS[i],i)).join('')+'</div>';
+  if(main.length>30)h+='<div class="muted nom-sq-more">还有 '+(main.length-30)+' 个，搜得再具体一点吧</div>';
+  if(more.length)h+='<div class="muted nom-sq-more">词库里的其他字（不在 823 个学字表里，可以放进字帖）：</div><div class="nom-sq-list">'+more.map(c=>{const r=nomPickRd(g,c)||rd||nomReadingOf(c);return '<div class="nom-card nom-card-x"><span class="nom-big nom-k" style="cursor:default">'+esc(c)+'</span><div class="nom-info"><div class="nom-rd"><b>'+esc(r)+'</b> <span class="tag">学字表外</span></div></div><div class="nom-ops">'+nomPkBtn(t,c,rd)+'</div></div>';}).join('')+'</div>';
+  return '<div class="nom-sq-head muted">搜到的字（点大字练写，点 ＋ 放进「我选的字」）</div>'+h;
 }
 function nomSearch(tid,v){const t=getTask(tid);if(!t)return;const g=gwState(t);g.nmSq=v;const el=document.getElementById('nomSqRes');if(el)el.innerHTML=nomSearchRes(t,g);clearTimeout(nomSearch._s);nomSearch._s=setTimeout(save,800);}
-function nomPickRefresh(t,g){const a=document.getElementById('nomSqRes');if(a)a.innerHTML=nomSearchRes(t,g);const b=document.getElementById('nomPickBar');if(b)b.outerHTML=nomPickBar(t,g);}
+function nomPickRefresh(t,g){const p=g.nmPick||[];document.querySelectorAll('.nom-pk[data-pk]').forEach(b=>{const on=p.includes(b.dataset.pk);b.classList.toggle('on',on);b.textContent=on?'✓':'＋';});const b=document.getElementById('nomPickBar');if(b)b.outerHTML=nomPickBar(t,g);}
 function nomPickRd(g,c){return (g&&g.nmPickRd&&g.nmPickRd[c])||'';}
 function nomPickToggle(tid,c,rd){
   const t=getTask(tid);if(!t)return;const g=gwState(t);g.nmPick=g.nmPick||[];g.nmPickRd=g.nmPickRd||{};
@@ -5512,7 +5518,7 @@ function nomLoadHW(){
   return _nomHWP;
 }
 function nomStrokeData(){
-  if(!_nomSDP)_nomSDP=(window.NOM_STROKES?Promise.resolve():nomLoadScript('fonts/nom-strokes.js?v=2')).then(()=>{if(!window.NOM_STROKES)throw 0;return window.NOM_STROKES;}).catch(e=>{_nomSDP=null;throw e;});
+  if(!_nomSDP)_nomSDP=(window.NOM_STROKES?Promise.resolve():nomLoadScript('fonts/nom-strokes.js?v=3')).then(()=>{if(!window.NOM_STROKES)throw 0;return window.NOM_STROKES;}).catch(e=>{_nomSDP=null;throw e;});
   return _nomSDP;
 }
 const NOM_KAI='NomKai,NomSub,NomKaiExt,NomExt,"Han-Nom Kai","Nom Na Tong",serif';
@@ -5545,7 +5551,7 @@ function nomWriteClose(){_nw=null;document.getElementById('modalBox').classList.
 function nomTip(s){const el=document.getElementById('nwTip');if(el)el.innerHTML=s;}
 function nomStrokeQuiz(){
   const my=_nw;if(!my||!my.writer)return;my.done=false;my.miss=0;
-  nomTip(my.comp?'按笔顺一笔一笔写（这个自造喃字的笔顺是按部件拼的：先左后右、先上后下、先外后内），写错两次会提示':'按笔顺一笔一笔写，写错两次会提示下一笔');
+  nomTip(my.comp?'按笔顺一笔一笔写，写错两次会提示（自造喃字：字形是 Han-Nom Kai 楷体，笔顺按汉字规则排：先左后右、先上后下、先外后内）':'按笔顺一笔一笔写，写错两次会提示下一笔');
   my.writer.quiz({onMistake:()=>{my.miss++;},onComplete:s=>{my.done=true;my.miss=s.totalMistakes;nomTip(s.totalMistakes?'写完啦！错了 '+s.totalMistakes+' 次，点「完成」记下来，或者「重写」再来一遍':'写完啦！一笔都没错 ✨ 点「完成」记下来');}});
 }
 function nomTraceSetup(){
